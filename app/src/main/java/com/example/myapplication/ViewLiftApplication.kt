@@ -10,7 +10,7 @@ class ViewLiftApplication:Application() {
         BuffSdk.initialize(
             context = this,
             clientAccount =  "sportbuff"
-            //"viewlift"
+            //
         )
     }
 }
