@@ -31,22 +31,17 @@ class MainActivity : AppCompatActivity(), PositionListener, Player.Listener {
 //        setTheme(R.style.FullscreenTheme)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+
+        // hide the status bar and bottom navigation bar
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         setContentView(binding.root)
         //hide the toolbar
         supportActionBar?.hide()
-        //hide the status bar
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 
-        //hide the bottom navigation bar
-        window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-            if (visibility and View.SYSTEM_UI_FLAG_FULLSCREEN == 0) {
-                window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-            }
-        }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         expPlayerObserver = ExoPlayerObserver(this, this)
         binding.buffView.startStream(
-            streamId = PROVIDER_ID,
+            providerId = PROVIDER_ID,
             listener = object : StreamResultListener {
                 override fun onSuccess(data: StreamSummary) {
                     startVideo()
@@ -67,6 +62,7 @@ class MainActivity : AppCompatActivity(), PositionListener, Player.Listener {
         val mediaItem: MediaItem = MediaItem.fromUri(Uri.parse(demoVideo))
         expPlayerObserver.player.setMediaItem(mediaItem)
         expPlayerObserver.player.prepare()
+        binding.playerView.useController = true
         expPlayerObserver.player.addListener(this)
 
         binding.playerView.keepScreenOn = true
@@ -99,7 +95,7 @@ class MainActivity : AppCompatActivity(), PositionListener, Player.Listener {
 
     companion object {
 
-        private const val PROVIDER_ID = "d5ddd610-84b9-43b2-9e4f-b8edcb391e2b"
+        private const val PROVIDER_ID = "buffRedAppDemo"
         //"buffRedAppDemo"
         const val STATE_PLAYER_FULLSCREEN = "playerFullscreen"
         const val STATE_PLAYER_PLAYING = "playerOnPlay"
